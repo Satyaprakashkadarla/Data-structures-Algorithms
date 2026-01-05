@@ -1,19 +1,20 @@
 class Solution {
-  public long maxMatrixSum(int[][] matrix) {
-    long absSum = 0;
-    int minAbs = Integer.MAX_VALUE;
-    // 0 := even number of negatives
-    // 1 := odd number of negatives
-    int oddNeg = 0;
+    public long maxMatrixSum(int[][] nums) {
+        int n = nums.length;
+        long sum = 0;
+        int negCount = 0;
+        int minVal = Integer.MAX_VALUE;
 
-    for (int[] row : matrix)
-      for (final int num : row) {
-        absSum += Math.abs(num);
-        minAbs = Math.min(minAbs, Math.abs(num));
-        if (num < 0)
-          oddNeg ^= 1;
-      }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (nums[i][j] < 0) negCount++;
+                int val = Math.abs(nums[i][j]);
+                sum += val;
+                minVal = Math.min(minVal, val);
+            }
+        }
 
-    return absSum - oddNeg * minAbs * 2;
-  }
+        if (negCount % 2 == 0) return sum;
+        return sum - 2L * minVal;
+    }
 }
