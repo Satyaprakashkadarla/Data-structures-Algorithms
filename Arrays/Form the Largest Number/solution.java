@@ -1,33 +1,21 @@
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 class Solution {
     public String findLargest(int[] arr) {
-        String[] strArr = new String[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            strArr[i] = String.valueOf(arr[i]);
+        int n = arr.length;
+        String[] nums = new String[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = String.valueOf(arr[i]);
         }
         
-        Comparator<String> comparator = new Comparator<String>() {
-            @Override
-            public int compare(String a, String b) {
-                String order1 = a + b;
-                String order2 = b + a;
-                return order2.compareTo(order1);
-            }
-        };
+        Arrays.sort(nums, (a, b) -> (b + a).compareTo(a + b));
         
-        Arrays.sort(strArr, comparator);
+        if (nums[0].equals("0")) return "0";
         
-        if (strArr[0].equals("0")) {
-            return "0";
+        StringBuilder result = new StringBuilder();
+        for (String num : nums) {
+            result.append(num);
         }
-        
-        StringBuilder sb = new StringBuilder();
-        for (String s : strArr) {
-            sb.append(s);
-        }
-        
-        return sb.toString();
+        return result.toString();
     }
 }
