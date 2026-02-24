@@ -1,27 +1,21 @@
-import java.util.HashMap;
+import java.util.*;
 
 class Solution {
-    public int longestCommonSum(int[] a1, int[] a2) {
+    public int equalSumSpan(int[] a1, int[] a2) {
         int n = a1.length;
-        HashMap<Integer, Integer> mp = new HashMap<>(); // maps diff -> first index it was seen
-        int sum1 = 0, sum2 = 0, result = 0;
-
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int diff = 0;
+        int maxLen = 0;
+        
         for (int i = 0; i < n; i++) {
-            sum1 += a1[i];
-            sum2 += a2[i];
-            int diff = sum1 - sum2;
-
-            if (diff == 0) {
-                // from 0..i is balanced
-                result = Math.max(result, i + 1);
-            } else if (mp.containsKey(diff)) {
-                // seen this diff before, subarray (mp.get(diff) + 1..i) is balanced
-                result = Math.max(result, i - mp.get(diff));
+            diff += (a1[i] - a2[i]);
+            if (map.containsKey(diff)) {
+                maxLen = Math.max(maxLen, i - map.get(diff));
             } else {
-                // first time seeing this diff
-                mp.put(diff, i);
+                map.put(diff, i);
             }
         }
-        return result;
+        return maxLen;
     }
 }
