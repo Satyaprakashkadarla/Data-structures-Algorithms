@@ -1,26 +1,23 @@
 class Solution {
-    public int longestSubarray(int[] arr, int k) {
-      HashMap<Integer, Integer> map = new HashMap<>();
-         int n = arr.length;
-        int ans=0;
-         for(int i=0; i<n; i++){
-             if(arr[i]>k)
-             arr[i]=1;
-             else 
-              arr[i]=-1;
-         }
-        int preSum=0;
-        for(int i=0; i<n; i++){
-            preSum+=arr[i];
-            if(preSum>0){
-                ans=Math.max(ans, i+1);
+    int longestSubarray(int[] arr, int k) {
+    Map<Integer, Integer> prefixMap = new HashMap<>();
+    prefixMap.put(0, -1);
+    int prefixSum = 0, maxLength = 0;
+    
+    for (int i = 0; i < arr.length; i++) {
+        prefixSum += (arr[i] > k) ? 1 : -1;
+        
+        if (prefixSum > 0) {
+            maxLength = i + 1;
+        } else {
+            if (prefixMap.containsKey(prefixSum - 1)) {
+                maxLength = Math.max(maxLength, i - prefixMap.get(prefixSum - 1));
             }
-             if(map.containsKey(preSum-1))
-            ans=Math.max(ans, i-map.get(preSum-1));
-             
-             if(!map.containsKey(preSum))
-          map.put(preSum, i);
         }
-        return ans;
+        
+        prefixMap.putIfAbsent(prefixSum, i);
     }
+    
+    return maxLength;
+}
 }
