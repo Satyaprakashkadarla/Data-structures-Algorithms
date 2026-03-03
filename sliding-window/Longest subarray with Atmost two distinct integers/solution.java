@@ -1,32 +1,25 @@
+import java.util.*;
+
 class Solution {
     public int totalElements(int[] arr) {
-        int n = arr.length;
-        Map<Integer, Integer> map = new HashMap<>();
-
-        int i      = 0;       // left boundary of window
-        int j      = 0;       // right boundary of window
-        int result = 0;       // best window size seen
-
-        while (j < n) {
-            // include arr[j] into the window
-            map.put(arr[j], map.getOrDefault(arr[j], 0) + 1);
-
-            // if more than two distinct numbers, shrink from left
-            while (map.size() > 2) {
-                int count = map.get(arr[i]) - 1;
-                if (count == 0) {
-                    map.remove(arr[i]);     // remove key if freq is zero
-                } else {
-                    map.put(arr[i], count); // else update freq
+        int left = 0, maxLen = 0;
+        Map<Integer, Integer> freq = new HashMap<>();
+        
+        for (int right = 0; right < arr.length; right++) {
+            freq.put(arr[right], freq.getOrDefault(arr[right], 0) + 1);
+            
+            while (freq.size() > 2) {
+                int leftVal = arr[left];
+                freq.put(leftVal, freq.get(leftVal) - 1);
+                if (freq.get(leftVal) == 0) {
+                    freq.remove(leftVal);
                 }
-                i++;                        // move left boundary right
+                left++;
             }
-
-            // window [i..j] is valid, update result
-            result = Math.max(result, j - i + 1);
-            j++;                           // expand window to the right
+            
+            maxLen = Math.max(maxLen, right - left + 1);
         }
-
-        return result;
+        
+        return maxLen;
     }
 }
