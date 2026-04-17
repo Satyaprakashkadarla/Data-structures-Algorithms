@@ -1,0 +1,13 @@
+class Solution {
+    boolean canFormPalindrome(String s) {
+        int[] freq = new int[26];
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a']++;
+        }
+        int oddCount = 0;
+        for (int count : freq) {
+            if (count % 2 == 1) oddCount++;
+        }
+        return oddCount <= 1;
+    }
+}
