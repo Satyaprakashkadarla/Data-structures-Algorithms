@@ -1,18 +1,24 @@
 class Solution {
-  public char[][] rotateTheBox(char[][] box) {
-    final int m = box.length;
-    final int n = box[0].length;
-    char[][] ans = new char[n][m];
-    Arrays.stream(ans).forEach(A -> Arrays.fill(A, '.'));
+    public char[][] rotateTheBox(char[][] box) {
+        int rows = box.length;
+        int cols = box[0].length;
+        char[][] result = new char[cols][rows];
 
-    for (int i = 0; i < m; ++i)
-      for (int j = n - 1, k = n - 1; j >= 0; --j)
-        if (box[i][j] != '.') {
-          if (box[i][j] == '*')
-            k = j;
-          ans[k--][m - i - 1] = box[i][j];
+        for (int i = 0; i < rows; i++) {
+            int emptySpot = cols - 1;
+            for (int j = cols - 1; j >= 0; j--) {
+                if (box[i][j] == '#') {
+                    box[i][j] = '.';
+                    box[i][emptySpot--] = '#';
+                } else if (box[i][j] == '*') {
+                    emptySpot = j - 1;
+                }
+            }
+            for (int j = 0; j < cols; j++) {
+                result[j][rows - 1 - i] = box[i][j];
+            }
         }
 
-    return ans;
-  }
+        return result;
+    }
 }
