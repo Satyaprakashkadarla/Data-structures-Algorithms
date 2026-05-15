@@ -1,18 +1,24 @@
 class Solution {
     public int findMin(int[] nums) {
         int n = nums.length;
-        if (nums[0] <= nums[n - 1]) {
-            return nums[0];
-        }
-        int left = 0, right = n - 1;
-        while (left < right) {
-            int mid = (left + right) >> 1;
-            if (nums[0] <= nums[mid]) {
-                left = mid + 1;
+        int left = 0;
+        int right = n - 1;
+        int firstTrueIndex = -1;
+
+        // Binary search using the template: find first index where nums[mid] <= nums[n-1]
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            // Feasible condition: nums[mid] <= nums[n-1]
+            if (nums[mid] <= nums[n - 1]) {
+                firstTrueIndex = mid;
+                right = mid - 1;
             } else {
-                right = mid;
+                left = mid + 1;
             }
         }
-        return nums[left];
+
+        // firstTrueIndex points to the minimum element
+        return nums[firstTrueIndex];
     }
 }
