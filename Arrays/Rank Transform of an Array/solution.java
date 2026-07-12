@@ -1,18 +1,25 @@
+import java.util.*;
+
 class Solution {
     public int[] arrayRankTransform(int[] arr) {
-        int n = arr.length;
-        int[] t = arr.clone();
-        Arrays.sort(t);
-        int m = 0;
-        for (int i = 0; i < n; ++i) {
-            if (i == 0 || t[i] != t[i - 1]) {
-                t[m++] = t[i];
+        if (arr.length == 0) return arr;
+
+        int[] sorted = arr.clone();
+        Arrays.sort(sorted);
+
+        Map<Integer, Integer> rank = new HashMap<>();
+        int r = 1;
+
+        for (int num : sorted) {
+            if (!rank.containsKey(num)) {
+                rank.put(num, r++);
             }
         }
-        int[] ans = new int[n];
-        for (int i = 0; i < n; ++i) {
-            ans[i] = Arrays.binarySearch(t, 0, m, arr[i]) + 1;
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = rank.get(arr[i]);
         }
-        return ans;
+
+        return arr;
     }
 }
