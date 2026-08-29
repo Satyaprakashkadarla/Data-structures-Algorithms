@@ -1,24 +1,48 @@
+import java.util.*;
+
 class Solution {
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
         int n = nums.length;
-        Integer[] idx = new Integer[n];
-        for (int i = 0; i < n; ++i) {
-            idx[i] = i;
+
+        // Store {value, originalIndex}
+        int[][] arr = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            arr[i][0] = nums[i];
+            arr[i][1] = i;
         }
-        Arrays.sort(idx, (i, j) -> nums[i] - nums[j]);
-        int[] ans = new int[n];
-        for (int i = 0; i < n;) {
-            int j = i + 1;
-            while (j < n && nums[idx[j]] - nums[idx[j - 1]] <= limit) {
-                ++j;
+
+        // Sort by value
+        Arrays.sort(arr, Comparator.comparingInt(a -> a[0]));
+
+        int start = 0;
+
+        while (start < n) {
+            int end = start;
+
+            // Find one connected/swappable group
+            while (end + 1 < n &&
+                   (long) arr[end + 1][0] - arr[end][0] <= limit) {
+                end++;
             }
-            Integer[] t = Arrays.copyOfRange(idx, i, j);
-            Arrays.sort(t, (x, y) -> x - y);
-            for (int k = i; k < j; ++k) {
-                ans[t[k - i]] = nums[idx[k]];
+
+            // Get original indices of this group
+            int size = end - start + 1;
+            int[] indices = new int[size];
+
+            for (int i = 0; i < size; i++) {
+                indices[i] = arr[start + i][1];
             }
-            i = j;
+
+            // Smallest original indices get smallest values
+            Arrays.sort(indices);
+
+            for (int i = 0; i < size; i++) {
+                nums[indices[i]] = arr[start + i][0];
+            }
+
+            start = end + 1;
         }
-        return ans;
+
+        return nums;
     }
 }
